@@ -53,7 +53,7 @@ Q. Salir
 Seleccione el numero de Tarea o Q para Salir
 "@
 
-function showMainMenu {
+function ShowMainMenu {
     
     Do {
         Clear-Host

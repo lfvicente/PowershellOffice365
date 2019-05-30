@@ -2,7 +2,14 @@ Clear-Host
 
 # Abrimos la conexi?n con azureAD en caso de no estar conectado
 if($azureConnection.Account -eq $null){
-    $azureConnection = Connect-AzureAD
+    try {
+        $azureConnection = Connect-AzureAD    
+    } catch {
+        Clear-Host
+        Write-Warning "Debe conectarse a AzureAD" 
+        Start-Sleep -seconds 2
+    }
+    
 }    
 
 # Ficheros requeridos con Funciones auxiliares 
@@ -17,5 +24,9 @@ catch {
 }
 #endregion
 
-# lanzamos la aplicaci?n llamando al men? principal
-showMainMenu
+if($azureConnection.Account -ne $null){
+    # lanzamos la aplicación llamando al menú principal
+    showMainMenu
+}
+
+ 

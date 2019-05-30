@@ -42,8 +42,7 @@ Function FindUserByDNI($employeeId){
         if ($userList -ne $null){
             ForEach ($user in $userList){
                 Write-Host ""
-                Write-Host $user.UserPrincipalName
-                Write-Host $user.DisplayName
+                Write-Host $user.ToJson()
                 Write-Host ""
             }
         }else{            
@@ -139,7 +138,7 @@ function ComprobarCSV {
 #>
 
     # Preparamos el fichero de resultado de las comprobaciones    
-    $txtResultsTest =$env:userprofile + "\Documents\comprobaciones365_"+$(get-date -f yyMMddhhmmss)+".csv"
+    $txtResultsTest =$env:userprofile + "\Documents\Comprobaciones365_"+$(get-date -f yyMMddhhmmss)+".csv"
 
     # Fichero con los usuarios de alta nuevos    
     $NewUsers = import-csv -Path $CsvFilePath -Encoding UTF8 -Delimiter ";"
@@ -308,6 +307,8 @@ function ComprobarCSV {
     if ($Mensaje -eq ""){
         return $true
     }else{
+        Write-Host "Fichero de Errores generado: " 
+        Write-Host $txtResultsTest -ForegroundColor Red  
         return $false
     }
 }
@@ -353,7 +354,7 @@ function CargaUsuariosCSV {
     )
     
     $TimeStamp=$(get-date -f yyMMddhhmmss)
-    $CsvFilePass ="D:\365Pass"+$TimeStamp+".csv"  
+    $CsvFilePass = $env:userprofile + "\Documents\Pass365_"+$(get-date -f yyMMddhhmmss)+".csv"
 
     # Fichero con los usuarios de alta nuevos    
     $NewUsers = import-csv -Path $CsvFilePath -Encoding UTF8 -Delimiter ";"
@@ -439,7 +440,8 @@ function CargaUsuariosCSV {
             Set-AzureADUserLicense -ObjectId $ObjectId -AssignedLicenses $LicensesToAssign    
         }
     }
-
+    Write-Host "Fichero de Password generado: " 
+    Write-Host $CsvFilePass -ForegroundColor Yellow
 }
 
 function  NewUsersCSV {
